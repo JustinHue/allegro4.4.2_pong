@@ -1,0 +1,44 @@
+CC := g++
+CC_FLAGS := -Wall -s
+LD_FLAGS := `allegro-config --libs` 
+CCNAME := pong
+
+MODULES   := . objects scenes utils
+SRC_DIR   := $(addprefix src/,$(MODULES))
+BUILD_DIR := $(addprefix build/,$(MODULES))
+
+SRC       := $(foreach sdir,$(SRC_DIR),$(wildcard $(sdir)/*.cpp))
+OBJ       := $(patsubst src/%.cpp,build/%.o,$(SRC))
+INCLUDES  := $(addprefix -I,$(SRC_DIR))
+
+vpath %.cpp $(SRC_DIR)
+
+define make-goal
+$1/%.o: %.cpp
+	$(CC) $(INCLUDES) $(CC_FLAGS) -c $$< -o $$@
+endef
+
+.PHONY: all checkdirs clean
+
+all: checkdirs main.o $(CCNAME)
+
+main.o: main.cpp
+	$(CC) $(CC_FLAGS) -c main.cpp -o main.o $(LD_FLAGS)
+	
+$(CCNAME): $(OBJ)
+	$(CC) $(CC_FLAGS) $^ main.o -o $@ $(LD_FLAGS)
+
+
+checkdirs: $(BUILD_DIR)
+
+$(BUILD_DIR):	
+	@mkdir -p $@
+
+clean:
+	rm -r build/*
+	rm $(CCNAME)
+	rm main.o
+	
+$(foreach bdir,$(BUILD_DIR),$(eval $(call make-goal,$(bdir))))
+
+
