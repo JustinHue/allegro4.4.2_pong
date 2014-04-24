@@ -18,9 +18,9 @@ $1/%.o: %.cpp
 	$(CC) $(INCLUDES) $(CC_FLAGS) -c $$< -o $$@
 endef
 
-.PHONY: all checkdirs clean
+.PHONY: clean all checkdirs
 
-all: checkdirs main.o $(CCNAME)
+all: clean checkdirs main.o $(CCNAME)
 
 main.o: main.cpp
 	$(CC) $(CC_FLAGS) -c main.cpp -o main.o $(LD_FLAGS)
