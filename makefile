@@ -35,9 +35,9 @@ $(BUILD_DIR):
 	@mkdir -p $@
 
 clean:
-	rm -r build/*
-	rm $(CCNAME)
-	rm main.o
+	rm -f -r build/*
+	rm -f $(CCNAME)
+	rm -f main.o
 	
 $(foreach bdir,$(BUILD_DIR),$(eval $(call make-goal,$(bdir))))
 
